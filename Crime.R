@@ -1,99 +1,96 @@
-crime1 <-read.csv("2015-01-northern-ireland-street.csv")
-crime2 <- read.csv("2015-02-northern-ireland-street.csv")
-crime3 <- read.csv("2015-03-northern-ireland-street.csv")
-crime4 <- read.csv("2015-04-northern-ireland-street.csv")
-crime5 <- read.csv("2015-05-northern-ireland-street.csv")
-crime6 <- read.csv("2015-06-northern-ireland-street.csv")
-crime7 <- read.csv("2015-07-northern-ireland-street.csv")
-crime8 <- read.csv("2015-08-northern-ireland-street.csv")
-crime9 <- read.csv("2015-09-northern-ireland-street.csv")
-crime10 <- read.csv("2015-10-northern-ireland-street.csv")
-crime11 <- read.csv("2015-11-northern-ireland-street.csv")
-crime12 <- read.csv("2015-12-northern-ireland-street.csv")
+# Combining csv files into one to form a dataset.
+getwd()
+setwd("C:/Users/HP/Documents/CA2/NI Crime")
+list.files()
+list.dirs()
+list_files <- list.files(recursive = TRUE)
+AINICrime <- data.frame()
 
-crime_2015 <- rbind(crime1,crime2,crime3,crime4,crime5,crime6,crime7,crime8,crime9,crime10,crime11,crime12)
+for (list_files in list_files) {
+  new_datasets <- read.csv(list_files, header = TRUE)
+  AINICrime <- rbind(AINICrime,new_datasets)
+  rm(new_datasets)
+}
+rm(AINICrime)
 
-crime13 <- read.csv("2016-01-northern-ireland-street.csv")
-crime14 <- read.csv("2016-02-northern-ireland-street.csv")
-crime15 <- read.csv("2016-03-northern-ireland-street.csv")
-crime16 <- read.csv("2016-04-northern-ireland-street.csv")
-crime17 <- read.csv("2016-05-northern-ireland-street.csv")
-crime18 <- read.csv("2016-06-northern-ireland-street.csv")
-crime19 <- read.csv("2016-07-northern-ireland-street.csv")
-crime20 <- read.csv("2016-08-northern-ireland-street.csv")
-crime21 <- read.csv("2016-09-northern-ireland-street.csv")
-crime22 <- read.csv("2016-10-northern-ireland-street.csv")
-crime23 <- read.csv("2016-11-northern-ireland-street.csv")
-crime24 <- read.csv("2016-12-northern-ireland-street.csv")
+nrow(AINICrime)
+head(AINICrime,10)
 
-crime_2016 <- rbind(crime13,crime14,crime15,crime16,crime17,crime18,crime19,crime20,crime21,crime22,crime23,crime24)
+write.csv(AINICrime,"AINICrime.csv")
 
-crime25 <- read.csv("2017-01-northern-ireland-street.csv")
-crime26 <- read.csv("2017-02-northern-ireland-street.csv")
-crime27 <- read.csv("2017-03-northern-ireland-street.csv")
-crime28 <- read.csv("2017-04-northern-ireland-street.csv")
-crime29 <- read.csv("2017-05-northern-ireland-street.csv")
-crime30 <- read.csv("2017-06-northern-ireland-street.csv")
-crime31 <- read.csv("2017-07-northern-ireland-street.csv")
-crime32 <- read.csv("2017-08-northern-ireland-street.csv")
-crime33 <- read.csv("2017-09-northern-ireland-street.csv")
-crime34 <- read.csv("2017-10-northern-ireland-street.csv")
-crime35 <- read.csv("2017-11-northern-ireland-street.csv")
-crime36 <- read.csv("2017-12-northern-ireland-street.csv")
-
-crime_2017 <- rbind(crime25,crime26,crime27,crime28,crime29,crime30,crime31,crime32,crime33,crime34,crime35,crime36)
-
-AIINICrimeData <- rbind(crime_2015,crime_2016,crime_2017)
-
-write.csv(AIINICrimeData,"AIINICrimeData.csv")
-
-# Remove the attributes 
-
-AIINICrimeData$Crime.ID <- NULL
-AIINICrimeData$Reported.by <- NULL
-AIINICrimeData$Falls.within <- NULL
-AIINICrimeData$LSOA.code <- NULL
-AIINICrimeData$LSOA.name <- NULL
-AIINICrimeData$Last.outcome.category <- NULL
-AIINICrimeData$Context <- NULL
+# Modify and Remove the uncessaray attributes 
+AINICrime
+AINICrime$Crime.ID <- NULL
+AINICrime$Reported.by <- NULL
+AINICrime$Falls.within <- NULL
+AINICrime$LSOA.code <- NULL
+AINICrime$LSOA.name <- NULL
+AINICrime$Last.outcome.category <- NULL
+AINICrime$Context <- NULL
 
 # Recode the values of crime Type
-str(AIINICrimeData)
-class(AIINICrimeData$Crime.type)
 
-AIINICrimeData$Crime.type <- as.character(AIINICrimeData$Crime.type)
-class(AIINICrimeData$Crime.type)
+AINICrime$Crime.type <- as.character(AINICrime$Crime.type)
+class(AINICrime$Crime.type)
 
+AINICrime$Crime.type[AINICrime$Crime.type == "Anti-social behaviour"] <- "ASBO"
+AINICrime$Crime.type[AINICrime$Crime.type == "Bicycle theft"] <- "BITH"
+AINICrime$Crime.type[AINICrime$Crime.type == "Burglary"] <- "BURG"
+AINICrime$Crime.type[AINICrime$Crime.type == "Criminal damage and arson"] <- "CDAR"
+AINICrime$Crime.type[AINICrime$Crime.type == "Drugs"] <- "DRUG"
+AINICrime$Crime.type[AINICrime$Crime.type == "Other theft"] <- "OTTH"
+AINICrime$Crime.type[AINICrime$Crime.type == "Public order"] <- "PUBO"
+AINICrime$Crime.type[AINICrime$Crime.type == "Robbery"] <- "ROBY"
+AINICrime$Crime.type[AINICrime$Crime.type == "Shoplifting"] <- "SHOP"
+AINICrime$Crime.type[AINICrime$Crime.type == "Theft from the person"] <- "THPR"
+AINICrime$Crime.type[AINICrime$Crime.type == "Vehicle crime"] <- "VECR"
+AINICrime$Crime.type[AINICrime$Crime.type == "Violence and sexual offences"] <- "VISO"
+AINICrime$Crime.type[AINICrime$Crime.type == "Other crime"] <- "OTCR"
+AINICrime$Crime.type[AINICrime$Crime.type == "Possession of weapons"] <- "POW"
 
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Anti-social behaviour"] <- "ASBO"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Bicycle theft"] <- "BITH"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Burglary"] <- "BURG"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Criminal damage and arson"] <- "CDAR"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Drugs"] <- "DRUG"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Other theft"] <- "OTTH"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Public order"] <- "PUBO"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Robbery"] <- "ROBY"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Shoplifting"] <- "SHOP"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Theft from the person"] <- "THPR"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Vehicle crime"] <- "VECR"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Violence and sexual offences"] <- "VISO"
-AIINICrimeData$Crime.type[AIINICrimeData$Crime.type == "Other crime"] <- "OTCR"
-
+AINICrime$Crime.type <- as.factor(AINICrime$Crime.type)
 
 # Using Plot function 
 
-str(AIINICrimeData)
+attach(AINICrime) # Attach the data as global environment 
+plot(AINICrime$Crime.type, ylim = c(0,200000), col = "red", main = "Total Crime",xlab = "crime type", ylab = "Crime frequency")
+
 # Modifying Location Column 
-AIINICrimeData$Location <- gsub("On or near", "", AIINICrimeData$Location)
+AINICrime$Location <- gsub("On or near", "", AINICrime$Location)
 
 
 # Create rando sample data 
-#random_crime_sample <- AIINICrimeData[sample(1:nrow(AIINICrimeData), 5000),]
-#random_crime_sample$Location <- sample(LETTERS, 5000)
+AINICrime$Location[AINICrime$Location == " "] <- NA
+
+AINICrime <- na.omit(AINICrime)
 set.seed(100)
-rm(random_crime_sample)
+random_crime_sample <- AINICrime[sample(nrow(AINICrime),5000),]
 
-set.seed(100)
+CleanNIPostcodeData1 <- read.csv("CleanNIPostcodeData.csv", header = TRUE)
+
+find_a_town <- function(Location)    # function to get the town names 
+{
+  set.seed(100)
+  CleanNIPostcodeData1$Town[match(toupper(Location),CleanNIPostcodeData1$Town)]
+
+  print(random_crime_sample$Location) # Ramdom crime data with town data added.
+}
+random_crime_sample$Town <- find_a_town(random_crime_sample$Location)
+random_crime_sample$Town
+str(random_crime_sample)
+random_crime_sample <- find_a_town()
+
+head(random_crime_sample)
 
 
-install.packages("dplyr")
+# G
+getwd()
+
+setwd("C:/Users/HP/Documents/CA2")
+village_data <- read.csv("VillageList.csv")
+
+colnames(village_data)
+add_town_data <- function()
+{
+  
+}  
